@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Garage Door Service Booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .date-selector {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+        .date-option {
+            border: 1px solid #ccc;
+            padding: 10px;
+            cursor: pointer;
+            min-width: 100px;
+            text-align: center;
+        }
+        .date-option.selected {
+            background-color: #007bff;
+            color: white;
+        }
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .time-slot {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .time-slot.selected {
+            background-color: #007bff;
+            color: white;
+        }
+        .time-slot.unavailable {
+            background-color: #f8f9fa;
+            color: #ccc;
+            cursor: not-allowed;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Schedule Your Garage Door Service</h1>
+    
+    <div id="dateSelector" class="date-selector">
+        <!-- Dates will be populated by JavaScript -->
+    </div>
+
+    <div id="timeSlots" class="time-slots hidden">
+        <!-- Time slots will be populated by JavaScript -->
+    </div>
+
+    <div id="bookingForm" class="hidden">
+        <h2>Complete Your Booking</h2>
+        <div class="form-group">
+            <label for="firstName">First Name *</label>
+            <input type="text" id="firstName" required>
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last Name *</label>
+            <input type="text" id="lastName" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone Number *</label>
+            <input type="tel" id="phone" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email (Optional)</label>
+            <input type="email" id="email">
+        </div>
+        <div class="form-group">
+            <label for="service">Service Type *</label>
+            <select id="service" required>
+                <option value="">Select a service...</option>
+                <option value="repair">Repairs</option>
+                <option value="tuneup">Tune Up</option>
+            </select>
+        </div>
+        <button onclick="submitBooking()">Book Appointment</button>
+    </div>
+
+    <script>
+        const API_KEY = 'AIzaSyDmobmPbquT9qutgfMGVhDek90K0hAWSuo'; // Replace with your API key
+        const CALENDAR_ID = encodeURIComponent('bobby@dupreegaragedoors.com');
+        
+        let selectedDate = null;
+        let selectedTime = null;
+        let existingEvents = [];
+
+        // Time slots available
+        const timeSlots = [
+            '7:00 AM - 10:00 AM',
+            '10:00 AM - 1:00 PM',
+            '1:00 PM - 4:00 PM',
+            '4:00 PM - 7:00 PM'
+        ];
+
+        // Initialize the booking system
+        window.onload = function() {
+            populateDates();
+            fetchExistingEvents();
+        };
+
+        function populateDates() {
+            const dateSelector = document.getElementById('dateSelector');
+            const today = new Date();
+            
+            for(let i = 0; i < 7; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+                
+                const dateOption = document.createElement('div');
+                dateOption.className = 'date-option';
+                dateOption.innerHTML = `
+                    ${date.toLocaleDateString('en-US', { weekday: 'short' })}<br>
+                    ${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                `;
+                dateOption.onclick = () => selectDate(date);
+                dateSelector.appendChild(dateOption);
+            }
+        }
+
+        async function fetchExistingEvents() {
+            const today = new Date();
+            const nextWeek = new Date(today);
+            nextWeek.setDate(today.getDate() + 7);
+
+            const url = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}&timeMin=${today.toISOString()}&timeMax=${nextWeek.toISOString()}`;
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                existingEvents = data.items || [];
+                console.log('Existing events:', existingEvents);
+            } catch (error) {
+                console.error('Error fetching events:', error);
+            }
+        }
+
+        function selectDate(date) {
+            selectedDate = date;
+            document.querySelectorAll('.date-option').forEach(opt => 
+                opt.classList.remove('selected'));
+            event.target.classList.add('selected');
+            
+            showTimeSlots();
+        }
+
+        function showTimeSlots() {
+            const timeSlotsDiv = document.getElementById('timeSlots');
+            timeSlotsDiv.innerHTML = '';
+            timeSlotsDiv.classList.remove('hidden');
+            
+            timeSlots.forEach(slot => {
+                const timeSlot = document.createElement('div');
+                timeSlot.className = 'time-slot';
+                timeSlot.textContent = slot;
+                
+                if (isTimeSlotAvailable(slot)) {
+                    timeSlot.onclick = () => selectTimeSlot(slot);
+                } else {
+                    timeSlot.classList.add('unavailable');
+                }
+                
+                timeSlotsDiv.appendChild(timeSlot);
+            });
+        }
+
+        function isTimeSlotAvailable(slot) {
+            if (!selectedDate) return false;
+            
+            const [startStr] = slot.split(' - ');
+            const slotDate = new Date(selectedDate);
+            const [hours, minutes] = startStr.split(':');
+            const isPM = startStr.includes('PM');
+            
+            slotDate.setHours(
+                isPM ? parseInt(hours) + 12 : parseInt(hours),
+                parseInt(minutes),
+                0,
+                0
+            );
+
+            // Check if slot conflicts with existing events
+            return !existingEvents.some(event => {
+                const eventStart = new Date(event.start.dateTime);
+                const eventEnd = new Date(event.end.dateTime);
+                return slotDate >= eventStart && slotDate <= eventEnd;
+            });
+        }
+
+        function selectTimeSlot(slot) {
+            selectedTime = slot;
+            document.querySelectorAll('.time-slot').forEach(slot => 
+                slot.classList.remove('selected'));
+            event.target.classList.add('selected');
+            
+            document.getElementById('bookingForm').classList.remove('hidden');
+        }
+
+        async function submitBooking() {
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const service = document.getElementById('service').value;
+
+            if (!firstName || !lastName || !phone || !service) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            // Format the event times
+            const [startTime] = selectedTime.split(' - ');
+            const eventDate = new Date(selectedDate);
+            const [hours, minutes] = startTime.split(':');
+            const isPM = startTime.includes('PM');
+            
+            eventDate.setHours(
+                isPM ? parseInt(hours) + 12 : parseInt(hours),
+                parseInt(minutes),
+                0,
+                0
+            );
+
+            const endDate = new Date(eventDate);
+            endDate.setHours(endDate.getHours() + 3); // 3-hour window
+
+            // Create the calendar event
+            const event = {
+                'summary': `Garage Door ${service} - ${firstName} ${lastName}`,
+                'description': `Service: ${service}\nName: ${firstName} ${lastName}\nPhone: ${phone}${email ? '\nEmail: ' + email : ''}`,
+                'start': {
+                    'dateTime': eventDate.toISOString(),
+                    'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
+                },
+                'end': {
+                    'dateTime': endDate.toISOString(),
+                    'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
+                }
+            };
+
+            try {
+                const response = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(event)
+                });
+
+                if (response.ok) {
+                    alert('Booking confirmed! We will contact you to confirm your appointment.');
+                    location.reload(); // Refresh the page
+                } else {
+                    throw new Error('Failed to create event');
+                }
+            } catch (error) {
+                console.error('Error creating event:', error);
+                alert('There was an error booking your appointment. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>

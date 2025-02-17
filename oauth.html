@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calendar Test</title>
+</head>
+<body>
+    <button onclick="testCalendar()">Test Calendar</button>
+    <div id="result"></div>
+
+    <script>
+        const API_KEY = 'AIzaSyDmobmPbquT9qutgfMGVhDek90K0hAWSuo'; // Put your API key here
+        const CALENDAR_ID = encodeURIComponent('bobby@dupreegaragedoors.com');
+
+        function testCalendar() {
+            const url = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}&timeMin=${new Date().toISOString()}`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('result').innerText = 'Success: ' + JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    document.getElementById('result').innerText = 'Error: ' + error;
+                });
+        }
+    </script>
+</body>
+</html>
