@@ -9,7 +9,7 @@
             margin: 0 auto;
             padding: 20px;
         }
-        .date-selector {
+        .date-selectors {
             display: flex;
             gap: 10px;
             overflow-x: auto;
@@ -72,6 +72,44 @@
         .hidden {
             display: none;
         }
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            display: none;
+        }
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -111,12 +149,24 @@
                 <option value="tuneup">Tune Up</option>
             </select>
         </div>
-        <button onclick="submitBooking()">Book Appointment</button>
+        <button id="bookButton" onclick="submitBooking()">Book Appointment</button>
+    </div>
+    
+    <div id="loadingIndicator" class="loading">
+        <div class="spinner"></div> Processing your booking...
+    </div>
+    
+    <div id="successMessage" class="success-message">
+        Booking confirmed! We will contact you to confirm your appointment.
+    </div>
+    
+    <div id="errorMessage" class="error-message">
+        There was an error booking your appointment. Please try again.
     </div>
 
     <script>
-        const API_KEY = 'AIzaSyDmobmPbquT9qutgfMGVhDek90K0hAWSuo'; // Replace with your API key
-        const CALENDAR_ID = encodeURIComponent('bobby@dupreegaragedoors.com');
+        // Server API URL - adjust this to match your server port
+        const API_URL = 'http://localhost:5000';
         
         let selectedDate = null;
         let selectedTime = null;
@@ -150,33 +200,41 @@
                     ${date.toLocaleDateString('en-US', { weekday: 'short' })}<br>
                     ${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                 `;
-                dateOption.onclick = () => selectDate(date);
+                dateOption.onclick = function() { selectDate(date, this); };
                 dateSelector.appendChild(dateOption);
             }
         }
 
         async function fetchExistingEvents() {
-            const today = new Date();
-            const nextWeek = new Date(today);
-            nextWeek.setDate(today.getDate() + 7);
-
-            const url = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}&timeMin=${today.toISOString()}&timeMax=${nextWeek.toISOString()}`;
-            
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                existingEvents = data.items || [];
-                console.log('Existing events:', existingEvents);
-            } catch (error) {
-                console.error('Error fetching events:', error);
-            }
+    try {
+        const response = await fetch(`${API_URL}/availability`);
+        
+        // Check if response is JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            console.warn('Server didn\'t return JSON. Calendar availability might not work.');
+            return;
         }
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            existingEvents = data.events || [];
+            console.log('Existing events:', existingEvents);
+        } else {
+            console.error('Error fetching events:', data.error);
+        }
+    } catch (error) {
+        console.error('Error fetching events:', error);
+        // Continue without availability data
+    }
+}
 
-        function selectDate(date) {
+        function selectDate(date, element) {
             selectedDate = date;
             document.querySelectorAll('.date-option').forEach(opt => 
                 opt.classList.remove('selected'));
-            event.target.classList.add('selected');
+            element.classList.add('selected');
             
             showTimeSlots();
         }
@@ -192,7 +250,7 @@
                 timeSlot.textContent = slot;
                 
                 if (isTimeSlotAvailable(slot)) {
-                    timeSlot.onclick = () => selectTimeSlot(slot);
+                    timeSlot.onclick = function() { selectTimeSlot(slot, this); };
                 } else {
                     timeSlot.classList.add('unavailable');
                 }
@@ -218,19 +276,24 @@
 
             // Check if slot conflicts with existing events
             return !existingEvents.some(event => {
+                if (!event.start || !event.start.dateTime) return false;
                 const eventStart = new Date(event.start.dateTime);
                 const eventEnd = new Date(event.end.dateTime);
                 return slotDate >= eventStart && slotDate <= eventEnd;
             });
         }
 
-        function selectTimeSlot(slot) {
+        function selectTimeSlot(slot, element) {
             selectedTime = slot;
             document.querySelectorAll('.time-slot').forEach(slot => 
                 slot.classList.remove('selected'));
-            event.target.classList.add('selected');
+            element.classList.add('selected');
             
             document.getElementById('bookingForm').classList.remove('hidden');
+            
+            // Hide any previous messages
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
         }
 
         async function submitBooking() {
@@ -245,54 +308,55 @@
                 return;
             }
 
-            // Format the event times
-            const [startTime] = selectedTime.split(' - ');
-            const eventDate = new Date(selectedDate);
-            const [hours, minutes] = startTime.split(':');
-            const isPM = startTime.includes('PM');
+            // Show loading indicator
+            document.getElementById('loadingIndicator').style.display = 'block';
+            document.getElementById('bookButton').disabled = true;
             
-            eventDate.setHours(
-                isPM ? parseInt(hours) + 12 : parseInt(hours),
-                parseInt(minutes),
-                0,
-                0
-            );
-
-            const endDate = new Date(eventDate);
-            endDate.setHours(endDate.getHours() + 3); // 3-hour window
-
-            // Create the calendar event
-            const event = {
-                'summary': `Garage Door ${service} - ${firstName} ${lastName}`,
-                'description': `Service: ${service}\nName: ${firstName} ${lastName}\nPhone: ${phone}${email ? '\nEmail: ' + email : ''}`,
-                'start': {
-                    'dateTime': eventDate.toISOString(),
-                    'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
-                },
-                'end': {
-                    'dateTime': endDate.toISOString(),
-                    'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
-                }
-            };
-
             try {
-                const response = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}`, {
+                const response = await fetch(`${API_URL}/submit_booking`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(event)
+                    body: JSON.stringify({
+                        firstName,
+                        lastName,
+                        phone,
+                        email,
+                        service,
+                        date: selectedDate.toISOString(),
+                        time: selectedTime
+                    })
                 });
 
+                const data = await response.json();
+                
+                // Hide loading indicator
+                document.getElementById('loadingIndicator').style.display = 'none';
+                
                 if (response.ok) {
-                    alert('Booking confirmed! We will contact you to confirm your appointment.');
-                    location.reload(); // Refresh the page
+                    // Show success message
+                    document.getElementById('successMessage').style.display = 'block';
+                    
+                    // Reset form after 3 seconds
+                    setTimeout(() => {
+                        location.reload();
+                    }, 3000);
                 } else {
-                    throw new Error('Failed to create event');
+                    // Show error message
+                    document.getElementById('errorMessage').innerText = 
+                        data.error || 'There was an error booking your appointment.';
+                    document.getElementById('errorMessage').style.display = 'block';
+                    document.getElementById('bookButton').disabled = false;
                 }
             } catch (error) {
-                console.error('Error creating event:', error);
-                alert('There was an error booking your appointment. Please try again.');
+                console.error('Error submitting booking:', error);
+                // Hide loading indicator and show error
+                document.getElementById('loadingIndicator').style.display = 'none';
+                document.getElementById('errorMessage').innerText = 
+                    'Network error. Please try again.';
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('bookButton').disabled = false;
             }
         }
     </script>
