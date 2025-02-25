@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Garage Door Service Booking</title>
+    <style>
+/* Testimonials Section Styles */
+.testimonials {
+    padding: 10px;
+    background-color: #f8f9fa;
+    font-family: 'Roboto', sans-serif; /* Added this line */
+}
+
+.testimonials-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.testimonials h2 {
+    text-align: left;
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;  /* Medium weight for heading */
+    color: #2c3e50;
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+}
+
+.testimonial-card {
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    font-family: 'Roboto', sans-serif;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+}
+
+.stars {
+    color: #ffd700;
+    font-size: 1.2rem;
+}
+
+.stars-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+.platform-logo {
+    height: 1.2rem; /* Same height as stars */
+    width: auto;
+    object-fit: contain;
+}
+
+.quote {
+    color: #4a5568;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    min-height: 100px;
+    font-family: 'Roboto', sans-serif; /* Added this line */
+    font-weight: 300; /* Light weight for testimonial text */
+}
+
+.author {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-family: 'Roboto', sans-serif; /* Added this line */
+    
+}
+
+.location {
+    color: #718096;
+    font-size: 0.9rem;
+    font-family: 'Roboto', sans-serif; /* Added this line */
+    font-weight: 300; /* Light weight for testimonial text */
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 1200px) {
+    .testimonials-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .testimonials-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .testimonials h2 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .quote {
+        min-height: auto;
+        
+    }
+}
+
+
+    </style>
+
+</head>
+
+<body>
+    <section class="testimonials">
+        <div class="testimonials-container">
+            <h2>Testimonials</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars-container">
+                        <div class="stars">★★★★★</div>
+                        <img src="al.png" alt="Yelp" class="platform-logo">
+                    </div>
+                    <p class="quote">"Fast and professional service. Total pros didn't take any shortcuts and you can tell the difference in the quality work. Will definitely hire again next time the door gets fussy"</p>
+                    <p class="author">- Jace G.</p>
+                    <p class="location">Houston, TX</p>
+                </div>
+    
+                <div class="testimonial-card">
+                    <div class="stars-container">
+                        <div class="stars">★★★★★</div>
+                        <img src="yelp.png" alt="Google" class="platform-logo">
+                    </div>
+                    <p class="quote">"Residential, called for replacement services. Called for a competitive quote and they gave a no-BS answer. Showed up on time as promised and did a great job, including providing recommendations throughout. They are a dream contractor, highly recommend."</p>
+                    <p class="author">- Jared W.</p>
+                    <p class="location">Houston, TX</p>
+                </div>
+    
+                <div class="testimonial-card">
+                    <div class="stars-container">
+                        <div class="stars">★★★★★</div>
+                        <img src="tt.png" alt="Thumbtack" class="platform-logo">
+                    </div>
+                    <p class="quote">"Perfect. Fast. Inexpensive. Done on a moments notice on a Sunday afternoon."</p>
+                    <p class="author">- Chris W.</p>
+                    <p class="location">Houston Heights, TX</p>
+                </div>
+    
+                <div class="testimonial-card">
+                    <div class="stars-container">
+                        <div class="stars">★★★★★</div>
+                        <img src="aa.png" alt="Google" class="platform-logo">
+                    </div>
+                    <p class="quote">"They came out quickly and replaced the springs in the door very quickly and they were also very reasonable."</p>
+                    <p class="author">- Jon T.</p>
+                    <p class="location">Cypress, TX</p>
+                </div>
+    
+                <div class="testimonial-card">
+                    <div class="stars-container">
+                        <div class="stars">★★★★★</div>
+                        <img src="al.png" alt="Yelp" class="platform-logo">
+                    </div>
+                    <p class="quote">"Installed garage door opener, replaced rusty rollers and bad cables on garage doors. All done quickly and for a fair price."</p>
+                    <p class="author">- Yuri K.</p>
+                    <p class="location">Katy, TX</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<script>
+
+    
+</script>
+
+</body>
+</html>

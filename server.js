@@ -33,31 +33,33 @@ let oAuth2Client = null;
 
 // Command-line OAuth authorization
 function getAccessToken(oAuth2Client, callback) {
-  const authUrl = oAuth2Client.generateAuthUrl({
-    access_type: 'offline',
-    scope: SCOPES,
-  });
-  console.log('Authorize this app by visiting this URL:', authUrl);
-  
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-  
-  rl.question('Enter the code from that page here: ', (code) => {
-    rl.close();
-    oAuth2Client.getToken(code, (err, token) => {
-      if (err) {
-        console.error('Error retrieving access token', err);
-        return callback(err);
-      }
-      oAuth2Client.setCredentials(token);
-      fs.writeFileSync(TOKEN_PATH, JSON.stringify(token));
-      console.log('Token stored to', TOKEN_PATH);
-      callback(null, oAuth2Client);
+    const authUrl = oAuth2Client.generateAuthUrl({
+      access_type: 'offline',
+      scope: SCOPES,
+      response_type: 'code',  // Add this line explicitly
+      prompt: 'consent'       // Add this to force consent screen
     });
-  });
-}
+    console.log('Authorize this app by visiting this URL:', authUrl);
+    
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+    
+    rl.question('Enter the code from that page here: ', (code) => {
+      rl.close();
+      oAuth2Client.getToken(code, (err, token) => {
+        if (err) {
+          console.error('Error retrieving access token', err);
+          return callback(err);
+        }
+        oAuth2Client.setCredentials(token);
+        fs.writeFileSync(TOKEN_PATH, JSON.stringify(token));
+        console.log('Token stored to', TOKEN_PATH);
+        callback(null, oAuth2Client);
+      });
+    });
+  }
 
 // Initialize OAuth client
 function initializeOAuth(callback) {
@@ -394,11 +396,16 @@ app.get('/', (req, res) => {
 
 // Initialize OAuth and start server
 initializeOAuth((err, client) => {
+    // Even if OAuth fails, still start the server
     if (err) {
         console.error('OAuth initialization failed:', err);
+        console.log('Server will run without calendar integration');
     }
     
     app.listen(PORT, () => {
         console.log(`Server running at http://localhost:${PORT}`);
+        if (!oAuth2Client) {
+            console.log('NOTE: Calendar events will not be created (OAuth not configured)');
+        }
     });
 });

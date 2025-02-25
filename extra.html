@@ -9,22 +9,56 @@
             margin: 0 auto;
             padding: 20px;
         }
-        .date-selectors {
+        /* Updated date selector styles */
+        .date-selector {
             display: flex;
-            gap: 10px;
             overflow-x: auto;
-            padding: 10px 0;
+            gap: 10px;
+            padding: 15px 0;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: #007bff #f0f0f0;
+        }
+        .date-selector::-webkit-scrollbar {
+            height: 8px;
+        }
+        .date-selector::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 4px;
+        }
+        .date-selector::-webkit-scrollbar-thumb {
+            background-color: #007bff;
+            border-radius: 4px;
         }
         .date-option {
+            flex: 0 0 auto;
             border: 1px solid #ccc;
-            padding: 10px;
+            border-radius: 6px;
+            padding: 12px 20px;
             cursor: pointer;
-            min-width: 100px;
+            min-width: 120px;
             text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+        }
+        .date-option:hover {
+            border-color: #007bff;
+            background-color: #f8f9ff;
         }
         .date-option.selected {
             background-color: #007bff;
             color: white;
+            border-color: #0056b3;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .date-weekday {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        .date-monthday {
+            font-size: 15px;
         }
         .time-slots {
             display: grid;
@@ -37,10 +71,17 @@
             padding: 10px;
             text-align: center;
             cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .time-slot:hover:not(.unavailable) {
+            border-color: #007bff;
+            background-color: #f8f9ff;
         }
         .time-slot.selected {
             background-color: #007bff;
             color: white;
+            border-color: #0056b3;
         }
         .time-slot.unavailable {
             background-color: #f8f9fa;
@@ -110,58 +151,104 @@
             margin-top: 20px;
             display: none;
         }
+        
+        /* Book Now button styles */
+        .book-now-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+        .book-now-btn {
+            background-color: #007bff;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+        .book-now-btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+        #bookingFormContent {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <h1>Schedule Your Garage Door Service</h1>
+
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Logo">
+        </div>
+
     
-    <div id="dateSelector" class="date-selector">
-        <!-- Dates will be populated by JavaScript -->
+    <!-- Initial Book Now button -->
+    <div class="book-now-container">
+        <button id="bookNowBtn" class="book-now-btn" onclick="showBookingForm()">Book Now</button>
     </div>
 
-    <div id="timeSlots" class="time-slots hidden">
-        <!-- Time slots will be populated by JavaScript -->
-    </div>
+   
 
-    <div id="bookingForm" class="hidden">
-        <h2>Complete Your Booking</h2>
-        <div class="form-group">
-            <label for="firstName">First Name *</label>
-            <input type="text" id="firstName" required>
+
+    <!-- Booking form content (initially hidden) -->
+    <div id="bookingFormContent">
+        <h1>Schedule Your Garage Door Service</h1>
+        
+        <div id="dateSelector" class="date-selector">
+            <!-- Dates will be populated by JavaScript -->
         </div>
-        <div class="form-group">
-            <label for="lastName">Last Name *</label>
-            <input type="text" id="lastName" required>
+
+        <div id="timeSlots" class="time-slots hidden">
+            <!-- Time slots will be populated by JavaScript -->
         </div>
-        <div class="form-group">
-            <label for="phone">Phone Number *</label>
-            <input type="tel" id="phone" required>
+
+        <div id="bookingForm" class="hidden">
+            <h2>Complete Your Booking</h2>
+            <div class="form-group">
+                <label for="firstName">First Name *</label>
+                <input type="text" id="firstName" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name *</label>
+                <input type="text" id="lastName" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number *</label>
+                <input type="tel" id="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email (Optional)</label>
+                <input type="email" id="email">
+            </div>
+            <div class="form-group">
+                <label for="service">Service Type *</label>
+                <select id="service" required>
+                    <option value="">Select a service...</option>
+                    <option value="repair">Broken Springs</option>
+                    <option value="tuneup">Opener Not Working</option>
+                    <option value="replacement"></option>
+
+                </select>
+            </div>
+            <button id="bookButton" onclick="submitBooking()">Book Appointment</button>
         </div>
-        <div class="form-group">
-            <label for="email">Email (Optional)</label>
-            <input type="email" id="email">
+        
+        <div id="loadingIndicator" class="loading">
+            <div class="spinner"></div> Processing your booking...
         </div>
-        <div class="form-group">
-            <label for="service">Service Type *</label>
-            <select id="service" required>
-                <option value="">Select a service...</option>
-                <option value="repair">Repairs</option>
-                <option value="tuneup">Tune Up</option>
-            </select>
+        
+        <div id="successMessage" class="success-message">
+            Booking confirmed! We will contact you to confirm your appointment.
         </div>
-        <button id="bookButton" onclick="submitBooking()">Book Appointment</button>
-    </div>
-    
-    <div id="loadingIndicator" class="loading">
-        <div class="spinner"></div> Processing your booking...
-    </div>
-    
-    <div id="successMessage" class="success-message">
-        Booking confirmed! We will contact you to confirm your appointment.
-    </div>
-    
-    <div id="errorMessage" class="error-message">
-        There was an error booking your appointment. Please try again.
+        
+        <div id="errorMessage" class="error-message">
+            There was an error booking your appointment. Please try again.
+        </div>
     </div>
 
     <script>
@@ -180,15 +267,22 @@
             '4:00 PM - 7:00 PM'
         ];
 
-        // Initialize the booking system
-        window.onload = function() {
+        // Show booking form function
+        function showBookingForm() {
+            document.getElementById('bookNowBtn').parentElement.style.display = 'none';
+            document.getElementById('bookingFormContent').style.display = 'block';
+            
+            // Initialize booking form
             populateDates();
             fetchExistingEvents();
-        };
+        }
 
+        // Modified date population for horizontal scrolling
         function populateDates() {
             const dateSelector = document.getElementById('dateSelector');
             const today = new Date();
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             
             for(let i = 0; i < 7; i++) {
                 const date = new Date(today);
@@ -197,8 +291,8 @@
                 const dateOption = document.createElement('div');
                 dateOption.className = 'date-option';
                 dateOption.innerHTML = `
-                    ${date.toLocaleDateString('en-US', { weekday: 'short' })}<br>
-                    ${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    <div class="date-weekday">${days[date.getDay()]}</div>
+                    <div class="date-monthday">${months[date.getMonth()]} ${date.getDate()}</div>
                 `;
                 dateOption.onclick = function() { selectDate(date, this); };
                 dateSelector.appendChild(dateOption);
@@ -206,29 +300,29 @@
         }
 
         async function fetchExistingEvents() {
-    try {
-        const response = await fetch(`${API_URL}/availability`);
-        
-        // Check if response is JSON
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-            console.warn('Server didn\'t return JSON. Calendar availability might not work.');
-            return;
+            try {
+                const response = await fetch(`${API_URL}/availability`);
+                
+                // Check if response is JSON
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    console.warn('Server didn\'t return JSON. Calendar availability might not work.');
+                    return;
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    existingEvents = data.events || [];
+                    console.log('Existing events:', existingEvents);
+                } else {
+                    console.error('Error fetching events:', data.error);
+                }
+            } catch (error) {
+                console.error('Error fetching events:', error);
+                // Continue without availability data
+            }
         }
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            existingEvents = data.events || [];
-            console.log('Existing events:', existingEvents);
-        } else {
-            console.error('Error fetching events:', data.error);
-        }
-    } catch (error) {
-        console.error('Error fetching events:', error);
-        // Continue without availability data
-    }
-}
 
         function selectDate(date, element) {
             selectedDate = date;
