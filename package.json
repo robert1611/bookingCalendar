@@ -1,9 +1,10 @@
 {
   "name": "booking_calendar",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "simple-server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node simple-server.js",
+    "postinstall": "npm rebuild sqlite3",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
