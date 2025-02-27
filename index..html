@@ -7,565 +7,465 @@
     <!-- Font Awesome for Social Media Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        
-        /* Header styles */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 30px;
-            background-color: #ffa500 !important;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            height: 100px !important;
-        }
-        
-        .logo img {
-            height: 120px;
-        }
-        
-        .phone-button:hover {
-            background-color: #ffa500 !important;
-        }
-        
-        /* Social Media Icons */
-        .social-icons a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #f8f9fa;
-            transition: all 0.3s ease;
-        }
-        
-        .social-icons a:hover {
-            transform: translateY(-3px);
-        }
-        
-        /* Hamburger Menu */
-        .hamburger-menu {
-            display: none;
-            cursor: pointer;
-        }
-        
-        .hamburger-icon {
-            width: 30px;
-            height: 24px;
-            position: relative;
-            margin: 0 auto;
-        }
-        
-        .bar {
-            height: 4px;
-            width: 100%;
-            background-color: #333;
-            position: absolute;
-            border-radius: 2px;
-            transition: all 0.3s ease;
-        }
-        
-        .bar:nth-child(1) {
-            top: 0;
-        }
-        
-        .bar:nth-child(2) {
-            top: 10px;
-        }
-        
-        .bar:nth-child(3) {
-            top: 20px;
-        }
-        
-        /* Mobile Menu */
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 150px;
-            left: 0;
-            width: 100%;
-            background-color: white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            z-index: 1000;
-            padding: 20px;
-        }
-        
-        .mobile-social-icons {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .mobile-social-icons a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: #333;
-            font-size: 18px;
-            padding: 10px;
-        }
-        
-        /* Mobile Sticky Bottom Buttons */
-        .mobile-sticky-buttons {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-        }
-        
-        .mobile-button-container {
-            display: flex;
-            width: 100%;
-        }
-        
-        .mobile-phone-button, .mobile-contact-button {
-            flex: 1;
-            padding: 15px;
-            text-align: center;
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        
-        .mobile-phone-button {
-            background-color: #007bff;
-        }
-        
-        .mobile-contact-button {
-            background-color: #28a745;
-        }
-        
-        /* Media Queries */
-        @media (max-width: 786px) {
-            header {
-                height: auto;
-                padding: 10px 15px;
-            }
-            
-            .logo img {
-                height: 80px;
-            }
-            
-            .social-icons {
-                display: none !important;
-            }
-            
-            .phone-button {
-                display: none !important;
-            }
-            
-            .hamburger-menu {
-                display: block;
-            }
-            
-            .mobile-sticky-buttons {
-                display: block;
-            }
-            
-            /* Hide the floating book now button on mobile */
-            .book-now-container {
-                display: none !important;
-            }
-            
-            /* Adjust booking form width on mobile */
-            #bookingFormContent, #tuneupFormContent {
-                width: 80% !important;
-                left: 10% !important;
-            }
-
-            /* Adjust the orange subheader sections */
-                div[style*="height: 80px; background-color: #ffa500;"] {
-                    height: 60px !important; /* Reduced height */
-                }
-    
-                div[style*="height: 80px; background-color: #ffa500;"] h2 {
-                    font-size: 20px !important; /* Smaller font size */
-                    text-align: center !important; /* Center the text */
-                    width: 100% !important; /* Ensure full width */
-    }
-
-     /* Reduce hero section text size */
-     .hero-title {
-        font-size: 36px !important; /* Reduced from 48px */
-    }
-    
-    .hero-content h2 {
-        font-size: 22px !important; /* Reduced from 28px */
-    }
-    
-    .hero-content button {
-        font-size: 16px !important; /* Reduced button text */
-        padding: 12px 20px !important; /* Smaller button */
-    }
-
-        }
-        
-        /* Hero section with background image */
-        .hero {
-            position: relative;
-            height: 500px;
-            background-image: url('bobby.jpg');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
-        }
-        
-        .hero-content {
-            position: relative;
-            color: white;
-            text-align: center;
-            max-width: 800px;
-            padding: 20px;
-        }
-        
-        .hero-title {
-            font-size: 48px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        
-        .price-highlight {
-            color: #ffd700; /* Gold color for price */
-        }
-        
-        /* Fixed Book Now button */
-        .book-now-container {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 1000;
-        }
-        
-        .book-now-btn {
-            background-color: #007bff;
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-            transition: all 0.3s;
-        }
-        
-        .book-now-btn:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
-        }
-        
-        /* Tuneup Form styles */
-        #tuneupFormContent {
-            display: none;
-            width: 40%;
-            position: absolute;
-            top: 100px;
-            left: 30%;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            padding: 30px;
-            z-index: 1010;
-        }
-        
-        /* Booking form styles from your original code */
-        #bookingFormContent {
-            display: none;
-            width: 40%;
-            position: absolute;
-            top: 100px;
-            left: 30%;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            padding: 30px;
-            z-index: 1010;
-        }
-        
-        .date-selector {
-            display: flex;
-            overflow-x: auto;
-            gap: 10px;
-            padding: 15px 0;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: thin;
-            scrollbar-color: #007bff #f0f0f0;
-        }
-        
-        .date-selector::-webkit-scrollbar {
-            height: 8px;
-        }
-        
-        .date-selector::-webkit-scrollbar-track {
-            background: #f0f0f0;
-            border-radius: 4px;
-        }
-        
-        .date-selector::-webkit-scrollbar-thumb {
-            background-color: #007bff;
-            border-radius: 4px;
-        }
-        
-        .date-option {
-            flex: 0 0 auto;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            padding: 12px 20px;
-            cursor: pointer;
-            min-width: 120px;
-            text-align: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            transition: all 0.2s;
-        }
-        
-        .date-option:hover {
-            border-color: #ffa500;
-            background-color: #ffa500;
-            color: white;
-            transition: all 0.3s ease;
-        }
-        
-        .date-option.selected {
-            background-color: #007bff;
-            color: white;
-            border-color: #0056b3;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        .date-weekday {
-            font-weight: bold;
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-        
-        .date-monthday {
-            font-size: 15px;
-        }
-        
-        .time-slots {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .time-slot {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-        
-        .time-slot:hover:not(.unavailable) {
-            border-color: #ffa500;
-            background-color: #ffa500;
-            color: white;
-            transition: all 0.3s ease;
-        }
-        
-        .time-slot.selected {
-            background-color: #007bff;
-            color: white;
-            border-color: #0056b3;
-        }
-        
-        .time-slot.unavailable {
-            background-color: #f8f9fa;
-            color: #ccc;
-            cursor: not-allowed;
-        }
-        
-        .form-group {
-            margin: 15px 0;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        
-        input, select {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-        }
-        
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-        
-        button:disabled {
-            background-color: #ccc;
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        .loading {
-            display: none;
-            text-align: center;
-            margin-top: 20px;
-        }
-        
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #007bff;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            margin-right: 10px;
-            vertical-align: middle;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .success-message {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-            padding: 15px;
-            border-radius: 4px;
-            margin-top: 20px;
-            display: none;
-        }
-        
-        .error-message {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-            padding: 15px;
-            border-radius: 4px;
-            margin-top: 20px;
-            display: none;
-        }
-
-        .service-cards {
-            padding: 40px 30px;
-            background-color: #f8f9fa;
-        }
-        
-        .cards-wrapper {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
-        
-        .card {
-            flex: 1;
-            min-width: 300px;
-            background-color: white;
-            border-radius: 4px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 25px;
-            margin-bottom: 20px;
-            position: relative;
-        }
-        
-        .card-content {
-            margin-right: 270px; /* Space for the image */
-        }
-        
-        .card img {
-        position: static;
-        width: 250px;
-        height: auto;
-        border-radius: 4px;
-        margin-top: 20px;
-        margin-left: auto;
-        margin-right: auto;
-        object-fit: cover;
-        display: block;
-        bottom: unset;
-        right: unset;
-        }
-
-        @media (max-width: 1222px) {
-    .cards-wrapper {
-        flex-direction: column;
-    }
-    
-    .card {
-        flex: 1 1 100%;
-        width: 100%;
-        min-width: unset;
-    }
-    
-    .card-content {
-        margin-right: 270px; /* Keep the same layout inside cards */
-    }
-    
-    .card img {
-        /* Keep the same positioning inside each card */
-        position: absolute;
-        bottom: 25px;
-        right: 25px;
-        width: 250px;
-    }
+       body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
-        
-        @media (max-width: 680px) {
-            .card {
-                padding: 20px;
-            }
-            
-            .card-content {
-                margin-right: 0; /* Remove the space reserved for image */
-            }
-            
-            .card img {
-                position: static; /* Remove absolute positioning */
-                width: 200px; /* Full width image */
-                margin-top: 20px; /* Add space between content and image */
-                max-width: 100%;
-            }
 
-            
-        }
+/* Header styles */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #ffa500 !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    height: 100px !important;
+}
 
+.logo img {
+    height: 120px;
+}
 
-        /* Testimonials Section Styles */
+.phone-button:hover {
+    background-color: #ffa500 !important;
+    color: #2653eb !important;
+}
+
+/* Social Media Icons - MODIFIED to remove white circles */
+.social-icons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.social-icons a:hover {
+    transform: translateY(-3px);
+}
+
+/* For if you're using img tags instead of Font Awesome */
+.social-icons img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+/* Hamburger Menu */
+.hamburger-menu {
+    display: none;
+    cursor: pointer;
+}
+
+.hamburger-icon {
+    width: 30px;
+    height: 24px;
+    position: relative;
+    margin: 0 auto;
+}
+
+.bar {
+    height: 4px;
+    width: 100%;
+    background-color: #333;
+    position: absolute;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.bar:nth-child(1) {
+    top: 0;
+}
+
+.bar:nth-child(2) {
+    top: 10px;
+}
+
+.bar:nth-child(3) {
+    top: 20px;
+}
+
+/* Mobile Menu */
+.mobile-menu {
+    display: none;
+    position: fixed;
+    top: 150px;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    z-index: 1000;
+    padding: 20px;
+}
+
+.mobile-social-icons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.mobile-social-icons a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #333;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px;
+}
+
+/* Mobile Sticky Bottom Buttons */
+.mobile-sticky-buttons {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.mobile-button-container {
+    display: flex;
+    width: 100%;
+}
+
+.mobile-phone-button, .mobile-contact-button {
+    flex: 1;
+    padding: 15px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.mobile-phone-button {
+    background-color: #007bff;
+}
+
+.mobile-contact-button {
+    background-color: #28a745;
+}
+
+/* Hero section with background image */
+.hero {
+    position: relative;
+    height: 500px;
+    background-image: url('bobby.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+}
+
+.hero-content {
+    position: relative;
+    color: white;
+    text-align: center;
+    max-width: 800px;
+    padding: 20px;
+}
+
+.hero-title {
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.price-highlight {
+    color: #ffd700; /* Gold color for price */
+}
+
+/* Fixed Book Now button */
+.book-now-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+}
+
+.book-now-btn {
+    background-color: #007bff;
+    color: white;
+    font-size: 24px; /* Increased font size */
+    font-weight: bold;
+    padding: 25px 60px; /* Increased padding for height and width */
+    min-width: 260px; /* Set minimum width to ensure it's larger */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    transition: all 0.3s;
+    display: inline-block; /* Ensures proper sizing */
+    text-align: center;
+}
+
+.book-now-btn:hover {
+    background-color: #ffa500;
+    color: #2653eb;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+}
+
+/* Tuneup Form styles */
+#tuneupFormContent {
+    display: none;
+    width: 40%;
+    position: absolute;
+    top: 100px;
+    left: 30%;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    padding: 30px;
+    z-index: 1010;
+}
+
+/* Booking form styles from your original code */
+#bookingFormContent {
+    display: none;
+    width: 40%;
+    position: absolute;
+    top: 100px;
+    left: 30%;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    padding: 30px;
+    z-index: 1010;
+}
+
+.date-selector {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding: 15px 0;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #007bff #f0f0f0;
+}
+
+.date-selector::-webkit-scrollbar {
+    height: 8px;
+}
+
+.date-selector::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 4px;
+}
+
+.date-selector::-webkit-scrollbar-thumb {
+    background-color: #007bff;
+    border-radius: 4px;
+}
+
+.date-option {
+    flex: 0 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 12px 20px;
+    cursor: pointer;
+    min-width: 120px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: all 0.2s;
+}
+
+.date-option:hover {
+    border-color: #ffa500;
+    background-color: #ffa500;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.date-option.selected {
+    background-color: #007bff;
+    color: white;
+    border-color: #0056b3;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.date-weekday {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.date-monthday {
+    font-size: 15px;
+}
+
+.time-slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.time-slot {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.time-slot:hover:not(.unavailable) {
+    border-color: #ffa500;
+    background-color: #ffa500;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.time-slot.selected {
+    background-color: #007bff;
+    color: white;
+    border-color: #0056b3;
+}
+
+.time-slot.unavailable {
+    background-color: #f8f9fa;
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+.form-group {
+    margin: 15px 0;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input, select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+button:disabled {
+    background-color: #ccc;
+}
+
+.hidden {
+    display: none;
+}
+
+.loading {
+    display: none;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 20px;
+    display: none;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 20px;
+    display: none;
+}
+
+/* Service Cards Section */
+.service-cards {
+    padding: 40px 30px;
+    background-color: #f8f9fa;
+}
+
+.cards-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.card {
+    flex: 1;
+    min-width: 300px;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 25px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.card-content {
+    margin-right: 270px; /* Space for the image */
+}
+
+.card img {
+    width: 250px;
+    height: auto;
+    border-radius: 4px;
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    object-fit: cover;
+}
+
+/* Testimonials Section Styles */
 .testimonials {
     padding: 10px;
     background-color: #f8f9fa;
-    font-family: 'Roboto', sans-serif; /* Added this line */
+    font-family: 'Roboto', sans-serif;
 }
 
 .testimonials-container {
@@ -579,7 +479,7 @@
     font-size: 1.5rem;
     margin-bottom: 30px;
     font-family: 'Roboto', sans-serif;
-    font-weight: 500;  /* Medium weight for heading */
+    font-weight: 500;
     color: #2c3e50;
 }
 
@@ -615,7 +515,7 @@
 }
 
 .platform-logo {
-    height: 1.2rem; /* Same height as stars */
+    height: 2.2rem !important;
     width: auto;
     object-fit: contain;
 }
@@ -626,29 +526,115 @@
     line-height: 1.6;
     margin-bottom: 15px;
     min-height: 100px;
-    font-family: 'Roboto', sans-serif; /* Added this line */
-    font-weight: 300; /* Light weight for testimonial text */
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
 }
 
 .author {
     color: #2c3e50;
     font-weight: 600;
     margin-bottom: 5px;
-    font-family: 'Roboto', sans-serif; /* Added this line */
-    
+    font-family: 'Roboto', sans-serif;
 }
 
 .location {
     color: #718096;
     font-size: 0.9rem;
-    font-family: 'Roboto', sans-serif; /* Added this line */
-    font-weight: 300; /* Light weight for testimonial text */
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
 }
 
-/* Mobile Responsiveness */
+/* Media Queries */
+@media (max-width: 1222px) {
+    .cards-wrapper {
+        flex-direction: column;
+    }
+    
+    .card {
+        flex: 1 1 100%;
+        width: 100%;
+        min-width: unset;
+    }
+    
+    .card-content {
+        margin-right: 270px; /* Keep the same layout inside cards */
+    }
+    
+    .card img {
+        /* Keep the same positioning inside each card */
+        position: absolute;
+        bottom: 25px;
+        right: 25px;
+        width: 250px;
+    }
+}
+
 @media (max-width: 1200px) {
     .testimonials-grid {
         grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 786px) {
+    header {
+        height: auto !important;
+        padding: 10px 15px;
+    }
+    
+    .logo img {
+        height: 80px;
+    }
+    
+    .social-icons {
+        display: none !important;
+    }
+    
+    .phone-button {
+        display: none !important;
+    }
+    
+    .hamburger-menu {
+        display: block;
+    }
+    
+    .mobile-sticky-buttons {
+        display: block;
+    }
+    
+    /* Hide the floating book now button on mobile */
+    .book-now-container {
+        display: none !important;
+    }
+    
+    /* Adjust booking form width on mobile */
+    #bookingFormContent, #tuneupFormContent {
+        width: 80% !important;
+        left: 10% !important;
+    }
+
+    /* Adjust the orange subheader sections */
+    div[style*="height: 80px; background-color: #ffa500;"] {
+        height: 60px !important; /* Reduced height */
+    }
+
+    div[style*="height: 80px; background-color: #ffa500;"] h2 {
+        font-size: 20px !important; /* Smaller font size */
+        text-align: center !important; /* Center the text */
+        width: 100% !important; /* Ensure full width */
+    }
+
+    /* Reduce hero section text size */
+    .hero-title {
+        font-size: 36px !important; /* Reduced from 48px */
+    }
+    
+    .hero-content h2 {
+        font-size: 22px !important; /* Reduced from 28px */
+    }
+    
+    .hero-content button {
+        font-size: 16px !important; /* Reduced button text */
+        padding: 12px 20px !important; /* Smaller button */
     }
 }
 
@@ -662,6 +648,25 @@
     }
 }
 
+@media (max-width: 680px) {
+    .card {
+        padding: 20px;
+    }
+    
+    .card-content {
+        margin-right: 0; /* Remove the space reserved for image */
+    }
+    
+    .card img {
+        position: static; /* Remove absolute positioning */
+        width: 200px; /* Specific width for mobile */
+        height: auto;
+        margin: 20px auto 0; /* Center the image with top margin */
+        display: block; /* Makes margin auto work for centering */
+        max-width: 100%;
+    }
+}
+
 @media (max-width: 480px) {
     .testimonials-grid {
         grid-template-columns: 1fr;
@@ -669,13 +674,12 @@
 
     .quote {
         min-height: auto;
-        
     }
 }
-
  
     </style>
 </head>
+
 <body>
     <!-- Header with logo, social icons, and phone number -->
     <header style="height: 150px; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
@@ -684,12 +688,16 @@
         </div>
         
         <!-- Social Media Icons (hidden on mobile) -->
-        <div class="social-icons" style="display: flex; gap: 15px; align-items: center;">
-            <a href="https://www.facebook.com/profile.php?id=61561423146575" style="color: #3b5998; font-size: 40px;"><i class="fab fa-facebook"></i></a>
-            <a href="https://www.yelp.com/biz/dupree-garage-doors-houston" style="color: #1da1f2; font-size: 40px;"><i class="fab fa-yelp"></i></a>
-            <a href="https://www.angi.com/companylist/us/tx/houston/dupree-garage-doors-reviews-1.htm?page=2&featuredReviewsLimit=25&featuredReviewsOffset=25" style="color: #c32aa3; font-size: 40px;"><i class="fab fa-instagram"></i></a>
-            <a href="https://www.thumbtack.com/tx/houston/garage-door-repair/dupree-garage-doors/service/453154122070786060" style="color: #ff0000; font-size: 40px;"><i class="fab fa-youtube"></i></a>
-        </div>
+        <div class="social-icons" style="display: flex; gap: 15px; align-items: center;">             
+            <a href="https://www.facebook.com/profile.php?id=61561423146575" style="color: #1877f2; font-size: 40px;"><i class="fab fa-facebook"></i></a>             
+            <a href="https://www.yelp.com/biz/dupree-garage-doors-houston" style="color: red; font-size: 40px;"><i class="fab fa-yelp"></i></a>             
+            <a href="https://www.angi.com/companylist/us/tx/houston/dupree-garage-doors-reviews-1.htm?page=2&featuredReviewsLimit=25&featuredReviewsOffset=25" style="text-decoration: none;">
+                <img src="al.png" alt="Angi" style="width: 40px; height: 40px;">
+            </a>
+            <a href="https://www.thumbtack.com/tx/houston/garage-door-repair/dupree-garage-doors/service/453154122070786060" style="text-decoration: none;">
+                <img src="ttt.png" alt="Thumbtack" style="width: 60px; height: 60px;">
+            </a>
+        </div> 
         
         <!-- Hamburger Menu (visible only on mobile) -->
         <div class="hamburger-menu">
@@ -709,10 +717,15 @@
     <!-- Mobile Menu (hidden by default) -->
     <div class="mobile-menu" id="mobileMenu">
         <div class="mobile-social-icons">
-            <a href="#"><i class="fab fa-facebook"></i> Facebook</a>
-            <a href="#"><i class="fab fa-twitter"></i> Yelp</a>
-            <a href="#"><i class="fab fa-instagram"></i> Angi</a>
-            <a href="#"><i class="fab fa-youtube"></i> Thumbtack</a>
+            <a href="https://www.facebook.com/profile.php?id=61561423146575"><i class="fab fa-facebook" style="font-size: 40px;"></i>
+            <a href="https://www.yelp.com/biz/dupree-garage-doors-houston"><i
+                 class="fab fa-yelp" style="font-size: 40px;"></i>
+            <a href="https://www.angi.com/companylist/us/tx/houston/dupree-garage-doors-reviews-1.htm?page=2&featuredReviewsLimit=25&featuredReviewsOffset=25" style="text-decoration: none;">
+                <img src="al.png" alt="Angi" style="width: 40px; height: 40px;">
+            </a>
+            <a href="https://www.thumbtack.com/tx/houston/garage-door-repair/dupree-garage-doors/service/453154122070786060" style="text-decoration: none;">
+                <img src="ttt.png" alt="Thumbtack" style="width: 40px; height: 40px;">
+            </a>
         </div>
     </div>
     
@@ -744,11 +757,11 @@
             <!-- Card 1 -->
             <div class="card">
                 <div class="card-content">
-                    <h2 style="margin-top: 0; color: #333;">$375 Crasftsman Garage Door Opener w/ WiFi</h2>
+                    <h2 style="margin-top: 0; color: #333;">$375 Chamberlain Garage Door Opener w/ WiFi</h2>
                     <ul>
                         <li>1/2 HP Durable Chain Drive</li>
                         <li>WiFi Enabled</li>
-                        <li>1 Remote</li>
+                        <li>2 Remotes</li>
                         <li>HomeLink Compatible</li>
                         <li>Removal of Existing Opener</li>
                     </ul>
@@ -760,7 +773,7 @@
             <!-- Card 2 -->
             <div class="card">
                 <div class="card-content">
-                    <h2 style="margin-top: 0; color: #333;">$1,100 Two Car Garage Door - 16' wide x 7' tall</h2>
+                    <h2 style="margin-top: 0; color: #333;">$1,200 Two Car Garage Door - 16' wide x 7' tall</h2>
                     <ul>
                         <li>Classic Raised Panel Design</li>
                         <li>25 gauge steel</li>
@@ -777,7 +790,7 @@
     
     <!-- Fixed Book Now button -->
     <div class="book-now-container">
-        <button id="bookNowBtn" class="book-now-btn" onclick="showBookingForm()">Book Now</button>
+        <button id="bookNowBtn" class="book-now-btn" onclick="showBookingForm()">Click Here To Schedule</button>
     </div>
     
 
@@ -938,7 +951,7 @@
                 <div class="testimonial-card">
                     <div class="stars-container">
                         <div class="stars">★★★★★</div>
-                        <img src="al.png" alt="Yelp" class="platform-logo">
+                        <img src="yelp.jpg" alt="Google" class="platform-logo">
                     </div>
                     <p class="quote">"Fast and professional service. Total pros didn't take any shortcuts and you can tell the difference in the quality work. Will definitely hire again next time the door gets fussy"</p>
                     <p class="author">- Jace G.</p>
@@ -948,7 +961,7 @@
                 <div class="testimonial-card">
                     <div class="stars-container">
                         <div class="stars">★★★★★</div>
-                        <img src="yelp.png" alt="Google" class="platform-logo">
+                        <img src="al.png" alt="Google" class="platform-logo">
                     </div>
                     <p class="quote">"Residential, called for replacement services. Called for a competitive quote and they gave a no-BS answer. Showed up on time as promised and did a great job, including providing recommendations throughout. They are a dream contractor, highly recommend."</p>
                     <p class="author">- Jared W.</p>
@@ -958,7 +971,7 @@
                 <div class="testimonial-card">
                     <div class="stars-container">
                         <div class="stars">★★★★★</div>
-                        <img src="tt.png" alt="Thumbtack" class="platform-logo">
+                        <img src="ttt.png" alt="Thumbtack" class="platform-logo">
                     </div>
                     <p class="quote">"Perfect. Fast. Inexpensive. Done on a moments notice on a Sunday afternoon."</p>
                     <p class="author">- Chris W.</p>
@@ -968,7 +981,7 @@
                 <div class="testimonial-card">
                     <div class="stars-container">
                         <div class="stars">★★★★★</div>
-                        <img src="aa.png" alt="Google" class="platform-logo">
+                        <img src="al.png" alt="Google" class="platform-logo">
                     </div>
                     <p class="quote">"They came out quickly and replaced the springs in the door very quickly and they were also very reasonable."</p>
                     <p class="author">- Jon T.</p>
